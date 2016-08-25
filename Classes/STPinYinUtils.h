@@ -62,7 +62,20 @@
  *
  *  @return NSArray sorted by pin yin
  */
-- (NSArray *)sortedArrayWithAscend:(BOOL)ascend usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock;
+- (NSArray *)sortedArrayWithAscend:(BOOL)ascend
+           usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock;
+
+/**
+ *  @brief async sort by pin yin
+ *
+ *  @param ascend             YES ascend, otherwise decend
+ *  @param chineseStringBlock return the chinese string, detect the object type when null
+ *  @param completeSortedArrayBlock return NSArray sorted by pin yin
+ *
+ */
+- (void)asyncSortedArrayWithAscend:(BOOL)ascend
+           usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock
+          completeSortedArrayBlock:(void(^)(NSArray *completeSortedArray))completeSortedArrayBlock;
 
 /**
  *  @brief sort by pin yin
@@ -72,6 +85,19 @@
  *
  *  @return group NSArray sorted by first letter
  */
-- (NSArray *)sortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock;
+- (NSArray *)sortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend
+                             usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock;
+
+/**
+ *  @brief async sort by pin yin
+ *
+ *  @param ascend             YES ascend, otherwise decend
+ *  @param chineseStringBlock return the chinese string, detect the object type when null
+ *  @param completeSortedArrayBlock return NSArray sorted by pin yin
+ *
+ */
+- (void)asyncSortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend
+                        usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock
+                       completeSortedArrayBlock:(void(^)(NSArray *completeSortedArray))completeSortedArrayBlock;
 
 @end

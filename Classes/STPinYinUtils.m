@@ -203,7 +203,8 @@ NSString *unicode_pinyin;
 
 @implementation NSArray(STPinYin)
 
-- (NSArray *)sortedArrayWithAscend:(BOOL)ascend usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock {
+- (NSArray *)sortedArrayWithAscend:(BOOL)ascend
+           usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock {
     NSArray *resultArray = [self sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         
         NSString *chinese1;
@@ -232,7 +233,21 @@ NSString *unicode_pinyin;
     return resultArray;
 }
 
-- (NSArray *)sortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock {
+- (void)asyncSortedArrayWithAscend:(BOOL)ascend
+           usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock
+          completeSortedArrayBlock:(void(^)(NSArray *completeSortedArray))completeSortedArrayBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *resultArray = [self sortedArrayWithAscend:ascend usingChineseStringBlock:chineseStringBlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completeSortedArrayBlock) {
+                completeSortedArrayBlock(resultArray);
+            }
+        });
+    });
+}
+
+- (NSArray *)sortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend
+                             usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock {
     NSArray *resultArray = [self sortedArrayWithAscend:ascend usingChineseStringBlock:chineseStringBlock];
     
     NSMutableArray *groupArray = [NSMutableArray array];
@@ -288,6 +303,19 @@ NSString *unicode_pinyin;
     }
     
     return groupArray;
+}
+
+- (void)asyncSortedGroupArrayByFirstLetterWithAscend:(BOOL)ascend
+                        usingChineseStringBlock:(NSString * (^)(id obj))chineseStringBlock
+                       completeSortedArrayBlock:(void(^)(NSArray *completeSortedArray))completeSortedArrayBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *resultArray = [self sortedGroupArrayByFirstLetterWithAscend:ascend usingChineseStringBlock:chineseStringBlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completeSortedArrayBlock) {
+                completeSortedArrayBlock(resultArray);
+            }
+        });
+    });
 }
 
 @end
