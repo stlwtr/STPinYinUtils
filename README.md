@@ -1,5 +1,4 @@
 STPinYinUtils
 =========================
 
-1. 拼音排序、音调排序
-2. 
+objective-c pinyin utils
